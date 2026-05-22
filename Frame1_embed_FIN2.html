@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Helen Keller Intl — Job Architecture Framework (Embed-safe)</title>
+</head>
+<body>
+<div id="hki-job-arch-app">
+<style>
+#hki-job-arch-app {
+  --purple:       #7A4183;
+  --purple-dark:  #5a2f61;
+  --purple-light: #f2ecf3;
+  --purple-mid:   #c9a8ce;
+  --blue:         #41B6E6;
+  --blue-light:   #eaf7fd;
+  --blue-dark:    #2490c4;
+  --coral:        #F87C56;
+  --coral-light:  #fef1ec;
+  --teal:         #9CDBD9;
+  --teal-light:   #eaf8f7;
+  --yellow:       #F1C400;
+  --gray:         #5B6770;
+  --gray-mid:     #A7ACA2;
+  --gray-light:   #f5f5f4;
+  --gray-rule:    #d8d8d6;
+  --white:        #ffffff;
+  --text:         #1a1a1a;
+  --text-sec:     #5B6770;
+  --text-muted:   #909590;
+}#hki-job-arch-app *,
+#hki-job-arch-app *::before,
+#hki-job-arch-app *::after { box-sizing: border-box; margin: 0; padding: 0; }#hki-job-arch-app {
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: #efefed;
+  min-height: 100vh;
+}#hki-job-arch-app button { font-family: Arial, sans-serif; cursor: pointer; }#hki-job-arch-app /* ── PAGE SHELL ─────────────────────────────────────────────── */
+.page { max-width: 980px; margin: 2rem auto; padding: 0 1.25rem 3rem; }#hki-job-arch-app /* ── DOCUMENT HEADER (memo style) ───────────────────────────── */
+.doc-header {
+  background: var(--white);
+  border-top: 6px solid var(--purple);
+  padding: 1.5rem 2rem 0;
+  margin-bottom: 0;
+}#hki-job-arch-app .org-name {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: 6px;
+}#hki-job-arch-app .doc-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.25rem;
+  letter-spacing: -.3px;
+}#hki-job-arch-app .doc-rule { border: none; border-top: 1.5px solid var(--gray-rule); margin: 0; }#hki-job-arch-app /* ── MEMO FIELDS ────────────────────────────────────────────── */
+.memo-fields {
+  background: var(--white);
+  padding: 1rem 2rem;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0;
+}#hki-job-arch-app .memo-field {
+  display: contents;
+}#hki-job-arch-app .memo-field .label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text);
+  padding: 5px 2rem 5px 0;
+  white-space: nowrap;
+}#hki-job-arch-app .memo-field .value {
+  font-size: 12px;
+  color: var(--text-sec);
+  padding: 5px 0;
+  border-bottom: 0.5px solid var(--gray-rule);
+}#hki-job-arch-app .memo-field:last-child .label,
+#hki-job-arch-app .memo-field:last-child .value { border-bottom: none; }#hki-job-arch-app .memo-field .label { border-bottom: 0.5px solid var(--gray-rule); }#hki-job-arch-app .memo-field:last-child .label { border-bottom: none; }#hki-job-arch-app .doc-rule-bottom {
+  background: var(--white);
+  padding: 0 2rem;
+}#hki-job-arch-app .doc-rule-bottom hr { border: none; border-top: 1.5px solid var(--gray-rule); }#hki-job-arch-app /* ── TAB BAR ────────────────────────────────────────────────── */
+.tab-wrap {
+  background: var(--white);
+  padding: 0 2rem;
+  border-bottom: 2px solid var(--purple);
+}#hki-job-arch-app .tab-bar { display: flex; gap: 0; }#hki-job-arch-app .tab {
+  padding: 10px 18px;
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-sec);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  transition: all .15s;
+  letter-spacing: .01em;
+}#hki-job-arch-app .tab:hover { color: var(--purple); background: var(--purple-light); }#hki-job-arch-app .tab.on { color: var(--purple); font-weight: 700; border-bottom-color: var(--purple); background: var(--purple-light); }#hki-job-arch-app /* ── CONTENT AREA ───────────────────────────────────────────── */
+.content-area {
+  background: var(--white);
+  padding: 1.75rem 2rem;
+}#hki-job-arch-app .section { display: none; }#hki-job-arch-app .section.on { display: block; }#hki-job-arch-app /* ── TYPOGRAPHY ─────────────────────────────────────────────── */
+.section-heading {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--purple);
+  margin-bottom: .625rem;
+  margin-top: 1.5rem;
+  padding-bottom: .25rem;
+  border-bottom: 1px solid var(--purple-light);
+}#hki-job-arch-app .section-heading:first-child { margin-top: 0; }#hki-job-arch-app .body-text {
+  font-size: 13px;
+  color: var(--text-sec);
+  line-height: 1.75;
+  margin-bottom: 1rem;
+  max-width: 660px;
+}#hki-job-arch-app /* ── OVERVIEW ───────────────────────────────────────────────── */
+.cluster-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(165px, 1fr));
+  gap: 10px;
+  margin-bottom: .5rem;
+}#hki-job-arch-app .cluster-card {
+  background: var(--white);
+  border: 1px solid var(--gray-rule);
+  border-left: 4px solid var(--purple);
+  padding: .875rem 1rem;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}#hki-job-arch-app .cluster-card:hover { background: var(--purple-light); border-color: var(--purple); }#hki-job-arch-app .cluster-card-name { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 3px; }#hki-job-arch-app .cluster-card-grades { font-size: 11px; color: var(--text-muted); margin-bottom: 5px; }#hki-job-arch-app .cluster-card-desc { font-size: 12px; color: var(--text-sec); line-height: 1.45; }#hki-job-arch-app .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: .875rem; margin-bottom: 1rem; }#hki-job-arch-app .info-card {
+  border: 1px solid var(--purple-mid);
+  background: var(--purple-light);
+  padding: .875rem 1rem;
+}#hki-job-arch-app .info-card-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--purple); margin-bottom: 5px; }#hki-job-arch-app .info-card-text { font-size: 12px; color: var(--purple-dark); line-height: 1.65; }#hki-job-arch-app .value-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: 10px; margin-bottom: 1rem; }#hki-job-arch-app .value-card { border: 1px solid var(--gray-rule); border-top: 3px solid var(--purple); background: var(--white); padding: .75rem 1rem; }#hki-job-arch-app .value-card-name { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 4px; }#hki-job-arch-app .value-card-text { font-size: 12px; color: var(--text-sec); line-height: 1.5; }#hki-job-arch-app .prog-note { font-size: 13px; color: var(--text-sec); line-height: 1.75; padding: .875rem 1rem; background: var(--gray-light); border-left: 4px solid var(--gray-mid); }#hki-job-arch-app /* ── BROWSER ────────────────────────────────────────────────── */
+.browser-layout { display: grid; grid-template-columns: 205px 1fr; gap: 1.25rem; }#hki-job-arch-app .grade-sidebar {
+  border: 1px solid var(--gray-rule);
+  background: var(--white);
+  overflow: hidden;
+}#hki-job-arch-app .grade-group-header {
+  background: var(--purple);
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+}#hki-job-arch-app .grade-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  font-size: 12px;
+  color: var(--text-sec);
+  cursor: pointer;
+  border-top: 0.5px solid var(--gray-rule);
+  transition: background .12s;
+  gap: 6px;
+}#hki-job-arch-app .grade-row:hover { background: var(--purple-light); color: var(--purple); }#hki-job-arch-app .grade-row.on { background: var(--purple); color: var(--white); font-weight: 700; }#hki-job-arch-app .grade-badge {
+  font-size: 10px;
+  font-weight: 700;
+  background: var(--gray-light);
+  color: var(--text-muted);
+  padding: 1px 5px;
+  flex-shrink: 0;
+}#hki-job-arch-app .grade-row.on .grade-badge { background: rgba(255,255,255,.25); color: var(--white); }#hki-job-arch-app /* Detail */
+.detail-wrap {}#hki-job-arch-app .detail-top {
+  background: var(--purple);
+  padding: 1rem 1.25rem;
+  margin-bottom: .875rem;
+}#hki-job-arch-app .detail-grade-line {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 4px;
+}#hki-job-arch-app .detail-grade-num {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase; color: var(--teal);
+}#hki-job-arch-app .detail-org-title { font-size: 12px; color: rgba(255,255,255,.6); font-style: italic; }#hki-job-arch-app .detail-title { font-size: 17px; font-weight: 700; color: var(--white); margin-bottom: 3px; }#hki-job-arch-app .detail-cluster { font-size: 12px; color: rgba(255,255,255,.65); margin-bottom: .75rem; }#hki-job-arch-app .detail-thumb {
+  font-size: 12px; color: rgba(255,255,255,.85); line-height: 1.55;
+  padding: .5rem .75rem;
+  background: rgba(255,255,255,.12);
+  border-left: 3px solid var(--teal);
+}#hki-job-arch-app .dim-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: .875rem; }#hki-job-arch-app .dim-card { border: 1px solid var(--gray-rule); padding: .75rem 1rem; }#hki-job-arch-app .dim-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--purple); margin-bottom: 5px;
+}#hki-job-arch-app .dim-text { font-size: 12px; color: var(--text-sec); line-height: 1.6; }#hki-job-arch-app .edu-row {
+  background: var(--blue-light);
+  border: 1px solid #b5dff5;
+  border-left: 4px solid var(--blue);
+  padding: .625rem 1rem;
+  font-size: 12px; color: var(--blue-dark);
+  margin-bottom: .875rem;
+  line-height: 1.6;
+}#hki-job-arch-app .comp-rows { display: flex; flex-direction: column; gap: .5rem; }#hki-job-arch-app .comp-row {
+  border: 1px solid var(--gray-rule);
+  border-left: 3px solid var(--coral);
+  padding: .625rem 1rem;
+  cursor: pointer;
+  transition: background .12s, border-left-color .12s;
+}#hki-job-arch-app .comp-row:hover { background: var(--purple-light); border-left-color: var(--purple); }#hki-job-arch-app .comp-row-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; }#hki-job-arch-app .comp-row-def { font-size: 12px; color: var(--text-sec); line-height: 1.55; }#hki-job-arch-app .comp-heading-link { cursor: pointer; display: flex; align-items: center; gap: 6px; }#hki-job-arch-app .comp-heading-link:hover { color: var(--purple-dark); }#hki-job-arch-app .comp-heading-arrow { font-size: 10px; color: var(--purple); opacity: .7; }#hki-job-arch-app /* ── COMPETENCIES TAB ───────────────────────────────────────── */
+.cluster-filter { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.25rem; }#hki-job-arch-app .filter-btn {
+  padding: 5px 14px; font-size: 12px; font-family: Arial, sans-serif;
+  border: 1px solid var(--gray-rule);
+  background: var(--white); color: var(--text-sec);
+  cursor: pointer; transition: all .15s; border-radius: 2px;
+}#hki-job-arch-app .filter-btn:hover { border-color: var(--purple); color: var(--purple); }#hki-job-arch-app .filter-btn.on { background: var(--purple); color: var(--white); border-color: var(--purple); font-weight: 700; }#hki-job-arch-app .comp-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: .875rem; }#hki-job-arch-app .comp-card { border: 1px solid var(--gray-rule); border-top: 3px solid var(--purple); padding: 1rem; }#hki-job-arch-app .comp-card-name { font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 6px; }#hki-job-arch-app .comp-card-def {
+  font-size: 12px; color: var(--text-sec); line-height: 1.65;
+  margin-bottom: .75rem; padding-bottom: .75rem;
+  border-bottom: 0.5px solid var(--gray-rule);
+}#hki-job-arch-app .level { margin-bottom: 8px; }#hki-job-arch-app .level-label {
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .05em; text-transform: uppercase; margin-bottom: 3px;
+}#hki-job-arch-app .lev-d { color: var(--coral); }#hki-job-arch-app .lev-p { color: var(--blue-dark); }#hki-job-arch-app .lev-o { color: var(--purple); }#hki-job-arch-app .level-text { font-size: 12px; color: var(--text-sec); line-height: 1.55; }#hki-job-arch-app /* ── FOOTER ─────────────────────────────────────────────────── */
+.doc-footer {
+  background: var(--white);
+  border-top: 1px solid var(--gray-rule);
+  padding: .75rem 2rem;
+  font-size: 11px; color: var(--text-muted);
+  display: flex; justify-content: space-between;
+}
+</style>
+<div class="page">
+
+  <!-- DOCUMENT HEADER -->
+  <div class="doc-header">
+    <div class="org-name">Helen Keller Intl &nbsp;·&nbsp; People &amp; Culture</div>
+    <div class="doc-title">Job Architecture Framework</div>
+  </div>
+  <hr class="doc-rule">
+
+  <div class="doc-rule-bottom"><hr></div>
+
+  <!-- TABS -->
+  <div class="tab-wrap">
+    <div class="tab-bar">
+      <button class="tab on" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="browser">Browse grades</button>
+      <button class="tab" data-tab="comps">Competencies</button>
+
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+
+    <!-- OVERVIEW -->
+    <div class="section on" id="tab-overview">
+      <p class="body-text">Helen Keller Intl uses a unified 15-grade structure designed to provide clarity of progression, enable mobility across functions and geographies, differentiate scope, impact, and accountability, and ensure consistent expectations across country and global offices.</p>
+
+      <div class="section-heading">Role clusters — select to explore</div>
+      <div class="cluster-grid" id="cluster-grid"></div>
+
+      <div class="section-heading">Two layers of expectations</div>
+      <div class="two-col">
+        <div class="info-card">
+          <div class="info-card-label">Layer 1 — Core values</div>
+          <div class="info-card-text">Our four values — Rigor, Integrity, Courage, and Compassion — are the threshold of belonging at Helen Keller Intl. They apply at every grade and in every role, assessed as demonstrated consistently or not demonstrated consistently.</div>
+        </div>
+        <div class="info-card">
+          <div class="info-card-label">Layer 2 — Behavioural competencies</div>
+          <div class="info-card-text">Four skill-based competencies that grow with scope, practice, training, and experience. Assessed as Developing, Proficient, or Outstanding. Competencies are grouped by role cluster and evolve across grades.</div>
+        </div>
+      </div>
+
+      <div class="section-heading">Our four core values</div>
+      <div class="value-grid">
+        <div class="value-card"><div class="value-card-name">Rigor</div><div class="value-card-text">Delivering thoughtful, accurate work grounded in evidence. Looking for ways to learn and improve, not just complete tasks.</div></div>
+        <div class="value-card"><div class="value-card-name">Integrity</div><div class="value-card-text">Acting honestly even when it is difficult. Keeping commitments and speaking truthfully about outcomes.</div></div>
+        <div class="value-card"><div class="value-card-name">Courage</div><div class="value-card-text">Naming problems directly. Offering solutions and standing by principled decisions, even under pressure.</div></div>
+        <div class="value-card"><div class="value-card-name">Compassion</div><div class="value-card-text">Actively listening and treating colleagues, partners, and communities we serve with genuine respect, dignity, and care.</div></div>
+      </div>
+
+      <div class="section-heading">Grade progression</div>
+      <div class="prog-note">Each grade has three sub-levels reflecting depth, consistency, and autonomy within the same scope — <strong>Associate</strong> (developing within grade scope), <strong>Core</strong> (fully operating at grade expectations), and <strong>Senior</strong> (sustained mastery at grade level). Supervisory responsibilities begin at Grade 7. Executive leadership begins at Grade 13.</div>
+    </div>
+
+    <!-- BROWSER -->
+    <div class="section" id="tab-browser">
+      <div class="browser-layout">
+        <div class="grade-sidebar" id="grade-sidebar"></div>
+        <div id="detail-area"></div>
+      </div>
+    </div>
+
+    <!-- COMPETENCIES -->
+    <div class="section" id="tab-comps">
+      <p class="body-text">Competencies are grouped by role cluster. Select a cluster to review the full expectations for each proficiency level.</p>
+      <div class="cluster-filter" id="cluster-filter"></div>
+      <div class="comp-cards" id="comp-cards"></div>
+    </div>
+
+  </div><!-- /content-area -->
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <span>Helen Keller Intl &nbsp;·&nbsp; Job Architecture Framework</span>
+    <span>People &amp; Culture &nbsp;·&nbsp; Fiscal Year 2027</span>
+  </div>
+
+</div><!-- /page -->
+<script>
+(function(){
+
+  function initApp(){
+
+    const root = document.getElementById('hki-job-arch-app');
+    if(!root){ return; }
+
+    const q = (sel) => root.querySelector(sel);
+    const qa = (sel) => root.querySelectorAll(sel);
+
+    /* ---- YOUR ORIGINAL CODE STARTS HERE ---- */
+
+    const CLUSTERS=[
+      {id:'exec', name:'Executive', grades:'13–15', desc:'Enterprise leadership — strategy, governance, and global operations'},
+      {id:'adv', name:'Advisory and Supervisory', grades:'9–12', desc:'Supervisory and advisory roles with functional or geographic scope'},
+      {id:'prof', name:'Professional and Management', grades:'7–8', desc:'Managing workstreams and coordinating integrated delivery'},
+      {id:'indep',name:'Independent', grades:'4–6', desc:'Specialist and independent contributors with functional expertise'},
+      {id:'core', name:'Core', grades:'1–3', desc:'Support and operational roles providing essential services'},
+    ];
+
+    /* ✅ KEEP ALL YOUR EXISTING DATA + FUNCTIONS EXACTLY AS IS */
+    /* ✅ NO other changes needed inside your logic */
+
+
+
+const GRADES=[
+  {g:15,title:'Senior Executive Leader',cluster:'Executive',cid:'exec',title_org:'President and Chief Executive Officer',
+   thumb:'Directs overall business; coordinates senior executives; represents organisation externally to Board, financial community, public',
+   scope:'Accountable for the full enterprise — mission, strategy, financial sustainability, governance, and global operations. Directs all functions and geographies, personally ensuring alignment across the institution and representing it to its highest external constituencies.',
+   decision:'Holds ultimate authority for strategic direction, capital allocation, organizational priorities, and risk posture. Makes decisions with long-term, organization-wide implications.',
+   influence:'Coordinates the efforts of the senior executive team and works with them and the Board to develop current and long-range objectives and policies. Serves as the primary interface with the Board and highest-level external stakeholders — navigating complex political, financial, and reputational considerations.',
+   impact:'Defines the long-term trajectory of the organization. Represents the organization to its key donors, the financial community, and the general public — ensuring sustainability, relevance, and mission impact across all constituencies.',
+   edu:'Advanced degree strongly preferred; 20+ years of progressive leadership experience, including 10+ years at the executive or chief-level'},
+  {g:14,title:'Executive Leader',cluster:'Executive',cid:'exec',title_org:'Chief Officer, [Function]',
+   thumb:'Thought leader; commits organisation to programmes; results affect fundamental mission and reputation; actions inspire organisational standards',
+   scope:'Leads a major division, organization-wide function, or cross-functional portfolio. Translates strategy into integrated operational direction across multiple teams, priorities, and stakeholders to advance organizational goals and long-term impact.',
+   decision:'Establishes strategic direction and policy across large segments of the organisation. Commits significant resources to programmes of action; accountable for organizational risk, compliance, and performance within domain.',
+   influence:'Operates as a thought leader recognized for advancing understanding and promoting effective action across the institution. Aligns competing priorities across executive leadership and influences internal and external stakeholders — including donors, governments, and sector peers — at the highest levels.',
+   impact:'Directly affects delivery of the organization\'s fundamental mission and the quality of its overall reputation. Actions inspire organizational standards and shape institutional resilience, scalability, and long-term health.',
+   edu:'Advanced degree in relevant discipline strongly preferred; 15+ years of progressively responsible experience, including 7+ years in senior or executive leadership'},
+  {g:13,title:'Associate Executive Leader',cluster:'Executive',cid:'exec',title_org:'Managing Director, [Region or Function]',
+   thumb:'Devises ground-breaking initiatives; develops institutional relationships; builds consensus; actions establish organisational standards',
+   scope:'Defines long-term strategic direction for a major organizational area, establishing standards, priorities, and operating models that influence organizational effectiveness and mission delivery.',
+   decision:'Defines strategic direction within their area of responsibility, establishing standards, policies, and operating models that shape organizational practice and long-term outcomes.',
+   influence:'Devises ground-breaking initiatives and advocates for the organisation\'s agenda — building consensus and inspiring alliances for concerted action. Develops institutional relationships and engages high-level internal and external stakeholders to shape outcomes.',
+   impact:'Drives major organizational capabilities and outcomes. Results affect delivery of multiple, integrated, or diverse programmes — or the effectiveness of a wide range of organisational activities. Actions establish organizational standards and materially shape long-term mission delivery.',
+   edu:'Advanced degree strongly preferred; 15+ years of progressively responsible experience, including 7+ years leading a major function or portfolio'},
+  {g:12,title:'Senior Advisory and Supervisory Contributor',cluster:'Advisory and Supervisory',cid:'adv',title_org:'Senior Director, [Technical Area]',
+   thumb:'Integrates specialisations; innovates approaches; builds organisational standards; advocacy requiring empathy; collaborators inside and outside the organisation',
+   scope:'Leads a broad and complex function, program portfolio, or operational area requiring coordination across multiple systems, teams, or regions.',
+   decision:'Translates organizational strategy into integrated operational approaches, adapting resources and priorities across competing demands to support effective execution and organizational consistency.',
+   influence:'Aligns diverse stakeholders and workstreams through advocacy requiring empathy and the capacity to assimilate diverse perspectives. Navigates ambiguity with collaborators, counterparts, and service providers both inside and outside the organisation.',
+   impact:'Results affect overall execution of programmes or functional areas and the reputation and success of teams. Actions build organisational standards and influence medium- to long-term organisational performance.',
+   edu:'Advanced degree preferred; 12–15 years of relevant progressive experience, including 5+ years leading complex portfolio'},
+  {g:11,title:'Advisory and Supervisory Contributor',cluster:'Advisory and Supervisory',cid:'adv',title_org:'Director, [Technical Area]',
+   thumb:'Supervises project teams; provides authoritative advice; innovates new policies and programmes; secures cooperation from external partners; advises senior management',
+   scope:'Responsible for a large or highly complex function, geography, or program area with significant operational and strategic importance. Complexity may arise from scale, risk, stakeholder environment, or technical depth.',
+   decision:'Sets direction within area — innovating new policies, programmes, and execution frameworks that address complex operational and strategic challenges. Accountable for achieving strategic and operational goals.',
+   influence:'Secures cooperation and support from external partners and clients. Advises senior management on business and programme objectives — navigating complex stakeholder environments and reconciling competing priorities.',
+   impact:'Materially affects performance outcomes, operational risk, and organizational reputation within scope.',
+   edu:'Advanced degree preferred; bachelor\'s degree required or equivalent combination accepted; 10–12 years of relevant progressive experience, including 3–5 years supervising staff or leading a sizeable program or operational area'},
+  {g:10,title:'Associate Advisory and Supervisory Contributor',cluster:'Advisory and Supervisory',cid:'adv',title_org:'Associate Director, [Technical Area]',
+   thumb:'Guides programme development across related areas; assesses project effectiveness; recommends new initiatives; advises management on systems and procedures',
+   scope:'Holds full accountability for a defined function, program, or operational unit. Scope is clearly bounded but may be substantial in size or importance.',
+   decision:'Translates strategic direction into actionable plans. Assesses effectiveness of current approaches and recommends new initiatives and improvements to systems and procedures within their scope.',
+   influence:'Guides programme and function development across related project areas. Advises management on systems and procedures — engaging stakeholders across functions in moderately complex environments.',
+   impact:'Directly accountable for achieving operational, financial, and programmatic results within scope.',
+   edu:'Bachelor\'s degree required; advanced degree preferred; 8–10 years of relevant progressive experience, including 3+ years supervising staff or managers or leading a complex function or portfolio'},
+  {g:9,title:'Senior Professional and Managing Contributor',cluster:'Professional and Management',cid:'prof',title_org:'Senior Manager, [Technical Area]',
+   thumb:'Develops proposals independently; provides professional advice in defined area; recommends initiatives and priorities; assesses effectiveness of systems and procedures',
+   scope:'Oversees multiple interconnected projects, programs, or workstreams that require coordination and integration across teams or functions.',
+   decision:'Sets priorities across initiatives and manages tradeoffs. Develops proposals independently and recommends programme initiatives and priorities based on professional analysis.',
+   influence:'Provides professional advice within a defined subject area and assesses effectiveness of business systems and procedures. Coordinates across stakeholders with differing priorities and builds alignment through the quality of independent professional judgment.',
+   impact:'Improves consistency, efficiency, and execution quality across areas; reduces fragmentation and risk.',
+   edu:'Bachelor\'s degree required; advanced degree preferred; 7–9 years of relevant progressive experience, including 3+ years managing programs or workstreams'},
+  {g:8,title:'Professional and Managing Contributor',cluster:'Professional and Management',cid:'prof',title_org:'Manager, [Technical Area]',
+   thumb:'Coordinates interconnected workstreams; applies professional judgment; supports implementation and operational effectiveness across programs or functions',
+   scope:'Contributes to significant programs, initiatives, or functional segments with defined goals and moderate complexity. Coordinates and supports delivery through analysis, planning, implementation support, and day-to-day management of assigned workstreams or operational activities.',
+   decision:'Exercises professional judgment in organizing work, solving operational issues, and determining execution approaches within established frameworks. Compiles and analyzes information, identifies trends, and recommends practical solutions or improvements with guidance from more senior professionals where needed.',
+   influence:'Works closely with senior colleagues and coordinates with team members and stakeholders to support delivery and implementation. Influence is primarily through reliable execution, professional expertise, communication, and the quality of analysis and coordination provided.',
+   impact:'Contributes to effective program and operational delivery through reliable coordination, analysis, and implementation support. Impact is reflected in the quality, timeliness, consistency, and usefulness of work products and operational support provided.',
+   edu:'Bachelor\'s degree required; advanced degree or technical certification preferred where relevant; 6–8 years of relevant experience, including 2+ years coordinating or managing projects or programmes'},
+  {g:7,title:'Associate Professional and Managing Contributor',cluster:'Professional and Management',cid:'prof',title_org:'Associate Manager, [Technical Area]',
+   thumb:'Oversees integrated service platform; assesses delivery quality; anticipates delivery challenges',
+   scope:'Owns a defined body of work, program segment, or functional area with clear deliverables and expectations.',
+   decision:'Makes operational decisions within established frameworks. Assesses service delivery quality against programme needs and anticipates delivery challenges before they affect service continuity.',
+   influence:'Coordinates with stakeholders across adjacent teams and guides others informally. Influence is primarily through reliable, anticipatory process management rather than formal authority.',
+   impact:'Drives execution quality and reliability; contributes to short-term performance and output consistency and anticipates challenges before they affect the team.',
+   edu:'Bachelor\'s degree required or equivalent combination accepted; 4–6 years of relevant experience, including demonstrated coordination of projects'},
+  {g:6,title:'Senior Independent Contributor',cluster:'Independent',cid:'indep',title_org:'Senior Officer, [Technical Area]',
+   thumb:'Provides specialised process services; ensures consistency and timeliness; escalates non-standard issues',
+   scope:'Responsible for executing projects or workstreams with moderate complexity; may include coordination of tasks or contributors.',
+   decision:'Determines appropriate methods and approaches to achieve defined outcomes within established guidelines.',
+   influence:'Provides guidance or coordination within a team or across small groups; influence is primarily situational.',
+   impact:'Affects the quality, timeliness, and reliability of team outputs.',
+   edu:'Bachelor\'s degree required or equivalent combination accepted; 4–5 years of relevant professional experience; experience leading discrete projects'},
+  {g:5,title:'Independent Contributor',cluster:'Independent',cid:'indep',title_org:'Officer, [Technical Area]',
+   thumb:'Execute intricate transactions — comparative evaluation against rules; understanding of procedures; timely response',
+   scope:'Delivers defined program components or specialized functional work independently; manages complexity within area of expertise.',
+   decision:'Applies professional judgment to resolve non-routine issues and improve processes.',
+   influence:'Serves as a resource to peers; may influence through expertise rather than authority.',
+   impact:'Impacts quality and effectiveness of outputs; contributes to functional performance.',
+   edu:'Bachelor\'s degree required; or associate or technical diploma with 4+ years of directly related experience; 3–4 years of relevant professional experience'},
+  {g:4,title:'Associate Independent Contributor',cluster:'Independent',cid:'indep',title_org:'Associate Officer, [Technical Area]',
+   thumb:'Process basic transactions — consistent application of established procedures; subject-specific rules; limited discretion',
+   scope:'Processes basic transactions and assignments within a function by applying established processes and procedures consistently.',
+   decision:'Follows established procedures and applies understanding of subject-specific rules. Escalates issues that fall outside defined procedures with minimal discretion.',
+   influence:'Works within the immediate team. Interaction is primarily with direct colleagues and supervisors within the function.',
+   impact:'Contributes to the accuracy and consistency of transactional outputs within the function. Errors have a localised and short-term impact.',
+   edu:'Bachelor\'s degree required or equivalent combination accepted; 2–3 years of relevant experience, or associate or technical diploma with 4+ years of directly related experience'},
+  {g:3,title:'Senior Core Contributor',cluster:'Core',cid:'core',title_org:'Senior Assistant, [Technical Area]',
+   thumb:'Provide general support — organises basic information; routine support tasks; follows instructions',
+   scope:'Responsible for defined deliverables within a team; contributes to ongoing operations and outputs.',
+   decision:'Works independently on standard tasks and problems; selects appropriate solutions.',
+   influence:'Collaborates with peers across teams; limited complexity in stakeholder interactions.',
+   impact:'Supports consistency and reliability of outputs; contributes to team effectiveness.',
+   edu:'Post-secondary diploma, technical certificate, or bachelor\'s degree preferred; 2–3 years of relevant administrative or operational support experience'},
+  {g:2,title:'Core Contributor',cluster:'Core',cid:'core',title_org:'Assistant, [Technical Area]',
+   thumb:'Provide mechanical support — operates equipment; collates documents; clerical assistant tasks',
+   scope:'Supports recurring processes and operational tasks within a team; work is structured and routine.',
+   decision:'Follows defined guidelines for routine tasks. Escalates any non-standard issue to supervisor with minimal independent discretion.',
+   influence:'Coordinates primarily within immediate team; limited external interaction.',
+   impact:'Supports operational continuity; errors impact short-term workflow.',
+   edu:'Secondary or high school diploma required; post-secondary coursework or technical certificate preferred; 1–2 years of relevant support experience'},
+  {g:1,title:'Associate Core Contributor',cluster:'Core',cid:'core',title_org:'Associate Assistant, [Technical Area]',
+   thumb:'Executes manual and physical tasks; follows direction',
+   scope:'Performs clearly defined tasks as directed. Focused on completing assigned work safely and correctly.',
+   decision:'Follows established procedures and instructions; minimal discretion.',
+   influence:'Works independently on assigned tasks with limited stakeholder interaction.',
+   impact:'Contributes to accuracy and efficiency of immediate work; impact is localized.',
+   edu:'Secondary or high school education preferred; no prior experience required for most roles. Where roles are legally or technically credentialed (e.g. licensed driver, certified health worker), the relevant credential is required.'},
+];
+
+const COMPS={
+  exec:{name:'Executive (Grades 13–15)',comps:[
+    {name:'Owning Work and Building Trust',def:'Sustains the organisation\'s credibility with the Board, donors, governments, and external stakeholders by making transparent decisions, honouring commitments publicly, and holding themselves and others accountable in governance and external relationships.',d:'Acts with honesty and fairness. Follows through on commitments and reinforces accountability across the senior executive team. Acknowledges failures openly and takes responsibility with the Board when required.',p:'Builds trust with the Board, major donors, and governments through consistent, transparent, and values-aligned decisions. Addresses sensitive institutional issues directly and ensures fairness is reflected in governance and external relationships.',o:'Addresses institutional integrity risks directly and publicly, even when it is uncomfortable. Speaks openly about failures and course corrections with the Board and major stakeholders. Sets expectations for ethical behaviour across executive leadership and follows through on them consistently.'},
+    {name:'Adapting and Navigating Change',def:'Shapes and advances long-range organizational direction, courageously confronting hard realities, identifying strategic risks, and adapting strategy in response to changing conditions, evidence, and emerging priorities.',d:'Contributes to shaping long-range organisational direction. Makes difficult decisions and revises plans when risks or new information require a change of course.',p:'Articulates a clear strategic direction and builds alignment across senior leadership and governance stakeholders around long-range objectives. Advocates for organizational priorities externally and adapts strategy as conditions evolve.',o:'Presents a clear, evidence-based case for long-range direction and secures commitment across senior leadership and key stakeholders. Makes explicit trade-offs in the face of political, financial, and reputational complexity and communicates decisions and reasoning transparently.'},
+    {name:'Getting Work Done',def:'Directs the full organizational effort — coordinating senior executives, committing significant organisational resources to programmes of action, and holding leadership accountable for delivery in ways that directly affect mission and the organisation\'s reputation.',d:'Coordinates execution across the senior executive team. Monitors organization-wide performance and reinforces accountability at the leadership level.',p:'Commits the organisation to programmes of action and ensures their delivery. Allocates significant resources across organizational priorities and holds senior leaders accountable for outcomes that protect mission and reputation.',o:'Directs the organisation to deliver on its most important commitments at scale. Sets clear performance standards for leadership and monitors against them regularly. Identifies organizational risks early, adjusts strategy in response, and communicates changes and rationale to senior leadership.'},
+    {name:'Working Together and Growing Others',def:'Builds organizational leadership capacity by coaching and developing senior leaders, forging cross-institutional partnerships and alliances, and actively planning succession for mission-critical roles.',d:'Provides clear, candid feedback and supports leadership development while maintaining fairness and respect. Listens to diverse perspectives and models inclusive leadership.',p:'Coaches and challenges members of the executive team in how they lead and represent the organisation externally. Makes and communicates complex talent decisions that align leadership capability with institutional priorities, balancing performance, fairness, and long-term mission needs.',o:'Builds long-term organizational strength by developing future leaders, fostering strategic partnerships and alignment across the organization, and reinforcing accountability standards that sustain performance and continuity over time.'},
+  ]},
+  adv:{name:'Advisory and Supervisory (Grades 9–12)',comps:[
+    {name:'Owning Work and Building Trust',def:'Delivers honest, well-grounded professional advice and follows through on commitments to senior management, external partners, and peers. Takes clear accountability for outcomes within their scope and addresses gaps or failures directly rather than deflecting.',d:'Makes fair and transparent decisions within their centre, function or country. Reinforces expectations for ethical behavior and accountability across teams. Acknowledges mistakes and takes responsibility appropriately.',p:'Ensures consistency in how policies, decisions, and standards are applied across teams and leaders. Addresses misalignment or inequities directly and raises difficult findings with clarity, even when the situation is complex.',o:'Delivers advice and recommendations that others actively draw on as a reference point. Raises the standard for professional integrity across the function, country, or centre by addressing inconsistencies, naming difficult issues, and holding themselves and others to clear accountability standards.'},
+    {name:'Adapting and Navigating Change',def:'Shapes and advances functional or country direction by clarifying priorities, addressing risks directly, and adapting plans in response to evolving operational, political, or strategic conditions.',d:'Identifies strategic risks and opportunities within their portfolio and adjusts and adapts plans in response to changing internal or external conditions.',p:'Clarifies direction and vision and aligns teams around shared priorities. Makes difficult trade-offs and guides leaders through uncertainty and change.',o:'Develops and implements new policies or approaches that address complex challenges and that others across the organisation adopt as the standard. Facilitates agreement across competing stakeholders by surfacing differences openly, making trade-offs explicit, and building consensus around a clear direction.'},
+    {name:'Getting Work Done',def:'Translates organizational strategy into integrated execution by aligning priorities, strengthening performance standards, and reinforcing accountability across teams and functions.',d:'Oversees execution within their function or country and monitors performance against agreed priorities.',p:'Consistently aligns priorities and resources with strategic goals with the use of data and performance insights to address gaps and strengthen outcomes. Reinforces performance expectations across teams and functions.',o:'Designs and maintains a coherent delivery platform across centres, functions, or countries. Introduces process and system improvements proactively, tracks operational risks, and intervenes before they affect mission delivery.'},
+    {name:'Working Together and Growing Others',def:'Develops people and builds collaborative relationships across a diverse stakeholder ecosystem — supervising teams, securing cooperation from external partners, giving honest feedback, and creating structured opportunities for growth.',d:'Listens to and considers diverse perspectives in team and cross-functional interactions. Provides clear direction and candid, constructive feedback. Addresses performance gaps directly and ensures talent practices are applied consistently within their function or country.',p:'Encourages psychologically safe environments that enable strong leadership and cross-functional partnership. Develops strong performers and strengthens leadership capability across functions or countries. Makes complex talent decisions balancing performance, operational needs, and fairness.',o:'Builds and maintains inclusive, high-performing teams and external networks. Shares authoritative expertise openly, creates structured opportunities for peer learning, and addresses barriers that prevent people from contributing fully.'},
+  ]},
+  prof:{name:'Professional and Management (Grades 7–8)',comps:[
+    {name:'Owning Work and Building Trust',def:'Builds trust by following through on commitments, communicating openly about progress and problems, and taking responsibility for their work and its impact on others.',d:'Acts honestly and fairly in complex situations. Communicates transparently and addresses team or peer issues directly and respectfully, with support as needed. Reinforces accountability expectations across teams within their scope.',p:'Applies consistent standards of integrity through actions and decisions. Addresses sensitive issues thoughtfully and ensures decisions align with organizational values and policies. Holds self and others accountable for commitments, behaviors, and outcomes.',o:'Completes work to a consistently high standard and proactively identifies and resolves issues before they affect colleagues or delivery. Communicates transparently without being prompted and takes full accountability for the accuracy and quality of their outputs.'},
+    {name:'Adapting and Navigating Change',def:'Helps shape and advance functional or country direction by clarifying priorities, addressing risks directly, and adapting plans. Guides others through change with clarity, flexibility, and resilience, even in the face of ambiguity or difficult decisions.',d:'Identifies strategic risks and opportunities within their portfolio and adjusts and adapts plans in response to changing internal or external conditions.',p:'Clarifies direction and vision and aligns teams around shared priorities, even in the face of uncertainty. Adapts plans as conditions evolve. Engages others in change efforts and addresses resistance or concerns directly and constructively.',o:'Explains the rationale for changes clearly to colleagues, addresses concerns directly, and keeps the team focused on what needs to happen next. Identifies emerging challenges early and adapts processes before quality is affected.'},
+    {name:'Getting Work Done',def:'Translates strategy into results by aligning priorities, resources, systems, and processes, setting clear performance expectations, and using evidence to drive accountability and continuous improvement.',d:'Oversees execution within their function or country. Tracks outcomes and ensures work meets quality standards. Clarifies roles, priorities, and deliverables within immediate scope.',p:'Aligns budgets, staffing, systems, and operational plans with strategic goals. Uses data and learning to adapt strategies and improve results. Reinforces accountability for high-quality outcomes across collaborators.',o:'Strengthens operating discipline across multiple teams or countries. Delivers sustained, high-quality outcomes at scale. Anticipates risks and strengthens systems or processes. Establishes clear performance standards and accountability mechanisms that elevate execution across functions.'},
+    {name:'Working Together and Growing Others',def:'Supports collaboration and the growth of others by sharing knowledge, providing constructive feedback, responding supportively to colleagues, and contributing to respectful and inclusive working relationships.',d:'Demonstrates empathy and respect in interactions. Encourages open dialogue and contributes to an environment where others feel heard and included.',p:'Fosters psychological safety and inclusive collaboration within teams and projects. Provides thoughtful, constructive feedback that supports the growth of peers and colleagues.',o:'Shares analytical work and process knowledge proactively. Responds promptly to colleagues\' requests for support and follows through on collaborative commitments. Raises tensions within the team directly and constructively rather than allowing them to grow or go unresolved.'},
+  ]},
+  indep:{name:'Independent (Grades 4–6)',comps:[
+    {name:'Owning Work and Building Trust',def:'Builds trust by following through on commitments, communicating openly about progress and problems, and taking responsibility for their work and its impact on others.',d:'Acts reliably and follows through on commitments. Communicates openly with peers and supervisors. Takes increasing responsibility for shared work or projects, seeking support when needed.',p:'Builds trust-based relationships across teams or functions. Addresses issues and concerns clearly and respectfully. Takes accountability for individual and shared outcomes.',o:'Handles difficult situations fairly and transparently, raising concerns directly rather than avoiding them. Follows through consistently on commitments and, when others fall short, addresses it respectfully and directly rather than working around them.'},
+    {name:'Adapting and Navigating Change',def:'Speaks up about challenges and risks in their work, proposes constructive solutions, and adjusts their approach when priorities, tools, or methods change.',d:'Contributes ideas to improve team or project outcomes. Demonstrates openness to change and learning. Adjusts plans when priorities shift.',p:'Identifies risks and challenges thoughtfully and adapts plans to changing circumstances while helping others stay focused.',o:'Names challenges and difficult issues directly within their scope and proposes improvements. Helps colleagues understand and engage with changes by explaining the rationale and maintaining a constructive focus on what needs to happen next.'},
+    {name:'Getting Work Done',def:'Translates priorities into results by planning work, coordinating with others, and using evidence and learning to improve outcomes.',d:'Plans and organizes own work and contributes to team plans. Tracks progress against goals with guidance.',p:'Sets clear priorities for projects or workstreams. Monitors outcomes, adjusts plans as needed, and uses data or evidence to improve results.',o:'Consistently delivers high-quality results through others. Anticipates challenges, improves processes, and strengthens execution across teams or projects.'},
+    {name:'Working Together and Growing Others',def:'Supports the growth and well-being of colleagues by giving honest, constructive feedback, sharing knowledge and skills, and participating in collaborative work with care and respect for others.',d:'Treats colleagues with respect and consideration. Listens to others\' concerns without dismissing them and participates in team activities in a way that makes others feel included.',p:'Provides clear, constructive feedback and supports fair and inclusive team practices.',o:'Strengthens team effectiveness by supporting others and fostering psychological safety, collaboration, and belonging within their team or area of responsibility.'},
+  ]},
+  core:{name:'Core (Grades 1–3)',comps:[
+    {name:'Owning Work and Building Trust',def:'Builds trust by acting honestly, following through on commitments, and completing tasks by holding themselves accountable for their work results and behaviour.',d:'Acts honestly and respectfully. Follows policies and instructions with guidance. Takes responsibility for mistakes with support.',p:'Acts fairly and transparently with others. Communicates openly when issues arise. Follows through on tasks and commitments.',o:'Demonstrates consistent dependability and fairness. Takes responsibility without being asked and helps build trust within the team.'},
+    {name:'Adapting and Navigating Change',def:'Shares ideas proactively, remains open to learning and change, and adjusts approach when priorities, tasks, or working methods shift. Asks questions to clarify expectations and applies feedback or updated direction constructively.',d:'Engages in learning new skills and tests new approaches with support. Participates in team discussions and asks questions when unsure. Responds constructively when priorities or instructions change.',p:'Adjusts approach willingly when given new instructions or feedback. Raises questions respectfully when tasks or expectations are unclear — and applies updated direction correctly.',o:'Responds positively to change and applies new instructions carefully. Is flexible and reliable when tasks or priorities shift — making it easy for supervisors to redirect their efforts.'},
+    {name:'Getting Work Done',def:'Completes assigned work by following established processes, applying guidance from supervisors, and incorporating feedback to improve the quality of outputs.',d:'Completes assigned tasks as directed and follows established processes. Begins to manage time and priorities effectively with guidance.',p:'Delivers work on time and to expected quality standards. Tracks progress, asks clarifying questions, and applies feedback to improve performance.',o:'Takes strong ownership of assigned work. Completes tasks to a consistently high standard and applies feedback to continuously improve quality.'},
+    {name:'Working Together and Growing Others',def:'Listens attentively when colleagues speak, treats others with respect in all interactions, and participates in team activities and discussions constructively.',d:'Supports inclusion through thoughtful collaboration. Shows curiosity about others\' experiences and responds with kindness and humility.',p:'Contributes positively to team spirit. Shares what they know when it helps colleagues and participates in team activities with openness and respect.',o:'Contributes to a positive and inclusive team environment. Shares knowledge, supports others\' learning, and consistently models empathy and respect.'},
+  ]},
+};
+
+/* ── OVERVIEW: cluster cards ──────────────────────────────────── */
+const cg=q('#cluster-grid');
+CLUSTERS.forEach(cl=>{
+  const d=document.createElement('div');
+  d.className='cluster-card';
+  d.innerHTML=`<div class="cluster-card-name">${cl.name}</div><div class="cluster-card-grades">Grades ${cl.grades}</div><div class="cluster-card-desc">${cl.desc}</div>`;
+  d.onclick=()=>{
+    switchTab('browser');
+    const first=GRADES.find(g=>g.cid===cl.id);
+    if(first){setActiveGrade(first.g);renderDetail(first.g);}
+  };
+  cg.appendChild(d);
+});
+
+/* ── GRADE SIDEBAR ────────────────────────────────────────────── */
+const sb=q('#grade-sidebar');
+const groups=[
+  {label:'Executive',      ids:[15,14,13]},
+  {label:'Advisory and Supervisory', ids:[12,11,10]},
+  {label:'Professional and Management', ids:[9,8,7]},
+  {label:'Independent',    ids:[6,5,4]},
+  {label:'Core',           ids:[3,2,1]},
+];
+const shortTitle=t=>t
+  .replace('Senior Advisory and Supervisory Contributor','Senior Adv. and Supv.')
+  .replace('Associate Advisory and Supervisory Contributor','Assoc. Adv. and Supv.')
+  .replace('Advisory and Supervisory Contributor','Adv. and Supv.')
+  .replace('Senior Professional and Managing Contributor','Senior Professional')
+  .replace('Professional and Managing Contributor','Professional')
+  .replace('Associate Professional and Managing Contributor','Assoc. Professional')
+  .replace('Senior Independent Contributor','Senior Independent')
+  .replace('Independent Contributor','Independent')
+  .replace('Associate Independent Contributor','Assoc. Independent')
+  .replace('Senior Core Contributor','Senior Core')
+  .replace('Core Contributor','Core')
+  .replace('Associate Core Contributor','Assoc. Core')
+  .replace('Senior Executive Leader','Senior Executive')
+  .replace('Executive Leader','Executive')
+  .replace('Associate Executive Leader','Assoc. Executive');
+
+groups.forEach(grp=>{
+  const lbl=document.createElement('div');
+  lbl.className='grade-group-header';
+  lbl.textContent=grp.label;
+  sb.appendChild(lbl);
+  grp.ids.forEach(id=>{
+    const g=GRADES.find(x=>x.g===id);
+    const row=document.createElement('div');
+    row.className='grade-row'+(id===15?' on':'');
+    row.dataset.g=id;
+    row.innerHTML=`<span>${shortTitle(g.title)}</span><span class="grade-badge">${id}</span>`;
+    row.onclick=()=>{setActiveGrade(id);renderDetail(id);};
+    sb.appendChild(row);
+  });
+});
+
+function setActiveGrade(id){
+  qa('.grade-row').forEach(r=>r.classList.toggle('on',+r.dataset.g===id));
+}
+
+function renderDetail(id){
+  const g=GRADES.find(x=>x.g===id);
+  const comps=COMPS[g.cid].comps;
+  q('#detail-area').innerHTML=`
+    <div class="detail-top">
+      <div class="detail-grade-line">
+        <span class="detail-grade-num">Grade ${g.g}</span>
+        <span class="detail-org-title">${g.title_org}</span>
+      </div>
+      <div class="detail-title">${g.title}</div>
+      <div class="detail-cluster">${g.cluster}</div>
+      <div class="detail-thumb">${g.thumb}</div>
+    </div>
+    <div class="section-heading" style="margin-top:0">Role dimensions</div>
+    <div class="dim-grid">
+      <div class="dim-card"><div class="dim-label">Scope of responsibility</div><div class="dim-text">${g.scope}</div></div>
+      <div class="dim-card"><div class="dim-label">Decision making authority</div><div class="dim-text">${g.decision}</div></div>
+      <div class="dim-card"><div class="dim-label">Influence and leadership complexity</div><div class="dim-text">${g.influence}</div></div>
+      <div class="dim-card"><div class="dim-label">Organisational impact</div><div class="dim-text">${g.impact}</div></div>
+    </div>
+    <div class="edu-row">${g.edu}</div>
+    <div class="section-heading comp-heading-link" data-comp='${g.cid}'>Behavioural competencies <span class="comp-heading-arrow">&#8594; View full competency descriptions</span></div>
+    <div class="comp-rows">
+      ${comps.map(c=>`<div class="comp-row" data-comp='${g.cid}'><div class="comp-row-name">${c.name}</div><div class="comp-row-def">${c.def}</div></div>`).join('')}
+    </div>`;
+}
+renderDetail(15);
+
+/* ── COMPETENCIES TAB ─────────────────────────────────────────── */
+const cf=q('#cluster-filter');
+const cc=q('#comp-cards');
+Object.entries(COMPS).forEach(([key,cl],i)=>{
+  const b=document.createElement('button');
+  b.className='filter-btn'+(i===0?' on':'');
+  b.textContent=cl.name;
+  b.onclick=()=>{
+    qa('.filter-btn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    renderComps(key);
+  };
+  cf.appendChild(b);
+});
+function renderComps(key){
+  cc.innerHTML=COMPS[key].comps.map(c=>`
+    <div class="comp-card">
+      <div class="comp-card-name">${c.name}</div>
+      <div class="comp-card-def">${c.def}</div>
+      <div class="level"><div class="level-label lev-d">Developing</div><div class="level-text">${c.d}</div></div>
+      <div class="level"><div class="level-label lev-p">Proficient</div><div class="level-text">${c.p}</div></div>
+      <div class="level"><div class="level-label lev-o">Outstanding</div><div class="level-text">${c.o}</div></div>
+    </div>`).join('');
+}
+renderComps('exec');
+
+/* ── GO TO COMPETENCIES ───────────────────────────────────────── */
+function goToComps(cid){
+  switchTab('comps');
+  qa('.filter-btn').forEach(b=>{
+    const on=b.textContent===COMPS[cid].name;
+    b.classList.toggle('on',on);
+  });
+  renderComps(cid);
+}
+
+/* ── TAB SWITCHING ────────────────────────────────────────────── */
+function switchTab(id){
+  root.addEventListener('click', function(e){
+      const tab = e.target.closest('.tab');
+      if (tab){ switchTab(tab.dataset.tab); return;}
+      const comp = e.target.closest('[data-comp]');
+      if (comp){ goToComps(comp.dataset.comp); return;}
+    });
+  qa('.section').forEach(s=>s.classList.toggle('on',s.id==='tab-'+id));
+}
+root.addEventListener('click', function(e){
+      const tab = e.target.closest('.tab');
+      if (tab){ switchTab(tab.dataset.tab); return;}
+      const comp = e.target.closest('[data-comp]');
+      if (comp){ goToComps(comp.dataset.comp); return;}
+    }); });
+}
+
+  /* ✅ CRITICAL SHAREPOINT FIX */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+  } else {
+    initApp();
+  }
+
+})();
+
+</script>
+</div>
+</body>
+</html>
