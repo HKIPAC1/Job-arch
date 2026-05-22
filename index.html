@@ -548,9 +548,9 @@ function renderDetail(id){
       <div class="dim-card"><div class="dim-label">Organisational impact</div><div class="dim-text">${g.impact}</div></div>
     </div>
     <div class="edu-row">${g.edu}</div>
-    <div class="section-heading comp-heading-link" data-comp='${g.cid}'>Behavioural competencies <span class="comp-heading-arrow">&#8594; View full competency descriptions</span></div>
+    <div class="section-heading comp-heading-link" onclick="goToComps('${g.cid}')">Behavioural competencies <span class="comp-heading-arrow">&#8594; View full competency descriptions</span></div>
     <div class="comp-rows">
-      ${comps.map(c=>`<div class="comp-row" data-comp='${g.cid}'><div class="comp-row-name">${c.name}</div><div class="comp-row-def">${c.def}</div></div>`).join('')}
+      ${comps.map(c=>`<div class="comp-row" onclick="goToComps('${g.cid}')"><div class="comp-row-name">${c.name}</div><div class="comp-row-def">${c.def}</div></div>`).join('')}
     </div>`;
 }
 renderDetail(15);
@@ -593,20 +593,14 @@ function goToComps(cid){
 
 /* ── TAB SWITCHING ────────────────────────────────────────────── */
 function switchTab(id){
-  root.addEventListener('click', function(e){
-      const tab = e.target.closest('.tab');
-      if (tab){ switchTab(tab.dataset.tab); return;}
-      const comp = e.target.closest('[data-comp]');
-      if (comp){ goToComps(comp.dataset.comp); return;}
-    });
+  qa('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
   qa('.section').forEach(s=>s.classList.toggle('on',s.id==='tab-'+id));
 }
-root.addEventListener('click', function(e){
-      const tab = e.target.closest('.tab');
-      if (tab){ switchTab(tab.dataset.tab); return;}
-      const comp = e.target.closest('[data-comp]');
-      if (comp){ goToComps(comp.dataset.comp); return;}
-    }); });
+setTimeout(() => {
+      qa('.tab').forEach(tab => {
+        tab.addEventListener('click', () => switchTab(tab.dataset.tab));
+      });
+    }, 0);
 }
 
   /* ✅ CRITICAL SHAREPOINT FIX */
